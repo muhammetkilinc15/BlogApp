@@ -1,0 +1,16 @@
+npm i express 
+npm i nodemon@2.0.19
+
+
+
+
+
+
+
+----------- installed packages -----------
+
++-- bootstrap@5.2.0
++-- ejs@3.1.10
++-- express@4.18.1
++-- mysql2@3.11.0
+`-- nodemon@2.0.19
