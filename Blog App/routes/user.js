@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
-
 const db = require("../data/db");
 
 const data = {
@@ -9,15 +7,18 @@ const data = {
     categories: ["Web Geliştirme", "Programlama", "Mobil Uygulamalar", "Veri Analizi", "Ofis Uygulamaları"],
 };
 
+
+// Bir kursa ait detaya gittik
 router.get("/blogs/:blogid", function (req, res) {
-    // blogs-detail.ejs dosyasını render ederken gerekli verileri de ekleyin
     res.render("users/blogs-detail", {
-        blogid: req.params.blogid
+        blogid: req.params.blogid,
+        blog :  req.params.blog
     });
 });
 
+
+// Tüm Kursları blogs sayfasında listeledik
 router.get("/blogs", function (req, res) {
-    // blogs.ejs dosyasını render ederken gerekli verileri de ekleyin
     db.execute("select * from blog")
         .then(result => {
             res.render("users/blogs", {
@@ -31,6 +32,8 @@ router.get("/blogs", function (req, res) {
         });
 });
 
+
+// Ana Sayfada Gerekli kursları listeledik
 router.get("/", function (req, res) {
     db.execute("select * from blog")
         .then(result => {
