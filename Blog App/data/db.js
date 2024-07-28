@@ -2,7 +2,7 @@
 const mysql= require("mysql2");
 
 // veri tabanı bilgileri config.js içinde saklandı
-const config = require("../config.js")
+const config = require("../config")
 
 
 
@@ -12,8 +12,7 @@ connection.connect(function(err){
     if(err){
         return console.log(err);
     }
-    
-    console.log("Everything is okey")
+    console.log("The program connectted the database")
 });
 
 module.exports = connection.promise();
