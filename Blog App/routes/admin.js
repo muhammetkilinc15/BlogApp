@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require("path");
 
 const db = require("../data/db");
+const { title } = require("process");
 
 
 
@@ -31,7 +32,7 @@ router.post("/blog/create",async function(req,res){
    try
    {
     await db.execute("insert into blog (Title,Description,Image,mainPage,isApproved,categoryId) values(?,?,?,?,?,?)",[title,description,image,mainPage,isApproved,category])  
-    res.redirect("/");
+    res.redirect("/admin/blogs");
 }catch(err){
     console.log(err)
    }
@@ -44,8 +45,17 @@ router.get("/blogs/:blogid",function(req,res){
 })
 
 
-router.get("/blogs",function(req,res){
-    res.render("admin/blog-list")
+router.get("/blogs", async function(req,res){
+    try{
+        const [blogs,] = await db.execute("select * from blog")
+        res.render("admin/blog-list",{
+            title:"Blog-List",
+            blogs:blogs
+        })
+    }catch(err){
+        console.log(err);
+    }
+   
 })
 
 
