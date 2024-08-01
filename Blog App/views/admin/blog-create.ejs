@@ -1,12 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    admin blog create
-</body>
+  <head>
+    <%- include("../partials/head") %>
+  </head>
+  <body>
+    <%- include("../partials/nav") %>
+
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-md-12 mt-3">
+          <form action="">
+            <div class="row mb-3">
+              <label for="title" class="col-sm-2 col-form-label">Başlık</label>
+              <div class="col-sm-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="title"
+                  name="title"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="title" class="col-sm-2 col-form-label"
+                >Açıklama</label
+              >
+              <div class="col-sm-8">
+                <textarea
+                  name="description"
+                  rows="10"
+                  class="form-control"
+                ></textarea>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="title" class="col-sm-2 col-form-label">Image</label>
+              <div class="col-sm-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="image"
+                  id="image"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="title" class="col-sm-2 col-form-label"
+                >Kategori</label
+              >
+              <div class="col-sm-8">
+                <select name="category" id="category" class="form-select">
+                  <option value="-1" selected>Seçiniz</option>
+                  <% categories.forEach(element => { %>
+                    <option value="element.idCategory"><%= element.Name %></option>
+                  <% }) %>  
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-10 offset-sm-2">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="mainPage"
+                    name="mainPage"
+                  />
+                  <label type="checkbox" class="form-check-lbel" id="mainPage">
+                    Ana Sayfa</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-10 offset-sm-2">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="mainPage"
+                    name="mainPage"
+                  />
+                  <label type="checkbox" class="form-check-lbel" id="isApproved" name="isApproved">
+                    Onay</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-8 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">GÖnder</button>
+                </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
