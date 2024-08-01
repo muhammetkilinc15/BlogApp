@@ -5,60 +5,225 @@ const path = require("path");
 const db = require("../data/db");
 const { title } = require("process");
 
+//! ########################## Category Operations ##########################
+// ************************************** Remove Category **************************************
+
+router.get("/categories/delete/:categoryId", async (req, res) => {
+  const categorId = req.params.categoryId;
+  try {
+    const [categories] = await db.execute(
+      "select * from category where idCategory=?",
+      [categorId]
+    );
+    const category = categories[0];
+
+    res.render("admin/category-remove", {
+      title: "Delete Category",
+      category: category,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/categories/delete/:categoryId", async (req, res) => {
+  try {
+    const categoryId = req.body.idCategory;
+    await db.execute("Delete from category where idCategory=?", [categoryId]);
+    return res.redirect("/admin/categories?action=delete");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// ************************************** Create Category **************************************
+
+router.get("/category/create", async function (req, res) {
+  try {
+    res.render("admin/category-create", {
+      title: "Add category",
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.post("/category/create", async function (req, res) {
+  const name = req.body.Name;
+  try {
+    await db.execute("insert into category (Name) values(?)", [name]);
+    return res.redirect("/admin/categories?action=create");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// ************************************** Edit Category **************************************
+router.get("/categories/:categoryId", async (req, res) => {
+  try {
+    const categorId = req.params.categoryId;
+    const [categroies] = await db.execute("select * from category where idCategory=?", [
+      categorId,
+    ]);
+    const category = categroies[0];
+    if (category) {
+      return res.render("admin/category-edit", {
+        title: "Edit Category",
+        category: category,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 
-// admin klasörü altındaki blog-create.html sayfa yönlendirme
-router.get("/blog/create",async function(req,res){
+router.post("/categories/:categoryId",async (req,res)=>{
     try{
-        const [category,] = await db.execute("select * from category");
-
-        res.render("admin/blog-create",{
-            title: "Add blog",
-            categories : category
-        })
-    }catch(e){
-        console.log(e);
-    }   
-})
-
-// Yeni blog eklenince bu rouuter a gelecek
-router.post("/blog/create",async function(req,res){
-   const title = req.body.title;
-   const description = req.body.Description;
-   const image = req.body.Image;
-   const category = req.body.category;
-   const mainPage = req.body.mainPage=="0n" ?  1:0;
-   const isApproved = req.body.isApproved=="0n" ?  1:0; 
-   try
-   {
-    await db.execute("insert into blog (Title,Description,Image,mainPage,isApproved,categoryId) values(?,?,?,?,?,?)",[title,description,image,mainPage,isApproved,category])  
-    res.redirect("/admin/blogs");
-}catch(err){
-    console.log(err)
-   }
-})
+        const categorId = req.body.categoryId;
+        const Name = req.body.Name;
+        await db.execute("Update category set Name=? where idCategory=?",[Name,categorId]);
+        return res.redirect("/admin/categories?action=edit")
 
 
-// :blogid dedik mi bir değişken olarak algılar.
-router.get("/blogs/:blogid",function(req,res){
-    res.render("admin/blog-edit")
-})
-
-
-router.get("/blogs", async function(req,res){
-    try{
-        const [blogs,] = await db.execute("select * from blog")
-        res.render("admin/blog-list",{
-            title:"Blog-List",
-            blogs:blogs
-        })
     }catch(err){
         console.log(err);
     }
-   
+
 })
 
+// ************************************** List Category **************************************
+router.get("/categories", async (req, res) => {
+  try {
+    const [categories] = await db.execute("select * from category");
+    res.render("admin/category-list", {
+      title: "category-list",
+      categories: categories,
+      action: req.query.action,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
+//! ########################## Blog Operations ##########################
 
+// ************************************** Remove Blog **************************************
+
+router.get("/blog/delete/:blogid", async (req, res) => {
+  const blogid = req.params.blogid;
+  try {
+    const [blogs] = await db.execute("select * from blog where idblog=?", [
+      blogid,
+    ]);
+    const blog = blogs[0];
+
+    res.render("admin/blog-remove", {
+      title: "Delete Blog",
+      blog: blog,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/blog/delete/:blogid", async (req, res) => {
+  try {
+    const blogid = req.body.idblog;
+    await db.execute("Delete from blog where idblog=?", [blogid]);
+    return res.redirect("/admin/blogs?action=delete");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// ************************************** Create New Blog **************************************
+router.get("/blog/create", async function (req, res) {
+  try {
+    const [category] = await db.execute("select * from category");
+
+    res.render("admin/blog-create", {
+      title: "Add blog",
+      categories: category,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.post("/blog/create", async function (req, res) {
+  const title = req.body.title;
+  const description = req.body.Description;
+  const image = req.body.Image;
+  const category = req.body.category;
+  const mainPage = req.body.mainPage == "on" ? 1 : 0;
+  const isApproved = req.body.isApproved == "on" ? 1 : 0;
+  try {
+    await db.execute(
+      "insert into blog (Title,Description,Image,mainPage,isApproved,categoryId) values(?,?,?,?,?,?)",
+      [title, description, image, mainPage, isApproved, category]
+    );
+    res.redirect("/admin/blogs?action=create");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// ************************************** Edit Blog **************************************
+router.get("/blogs/:blogid", async (req, res) => {
+  try {
+    const blogid = req.params.blogid;
+    const [blogs] = await db.execute("select * from blog where idblog=?", [
+      blogid,
+    ]);
+    const [categories] = await db.execute("select * from category");
+    const blog = blogs[0];
+
+    if (blog) {
+      return res.render("admin/blog-edit", {
+        title: blog.title,
+        blog: blog,
+        categories: categories,
+      });
+    }
+    res.redirect("admin/blog-edit");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/blogs/:blogid", async (req, res) => {
+  const idblog = req.body.idblog;
+  const title = req.body.Title;
+  const description = req.body.Description;
+  const image = req.body.Image;
+  const category = req.body.category;
+  console.log(req.body.mainPage);
+  const mainPage = req.body.mainPage == "on" ? 1 : 0;
+  const isApproved = req.body.isApproved == "on" ? 1 : 0;
+  try {
+    await db.execute(
+      "update blog set Title=?,Description=?,Image=?,categoryId=?,mainPage=?,isApproved=? where idblog=?",
+      [title, description, image, category, mainPage, isApproved, idblog]
+    );
+    return res.redirect("/admin/blogs?action=edit");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// ************************************** Blog List **************************************
+router.get("/blogs", async function (req, res) {
+  try {
+    const [blogs] = await db.execute("select * from blog");
+    res.render("admin/blog-list", {
+      title: "Blog-List",
+      blogs: blogs,
+      action: req.query.action
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 module.exports = router; // Dışarıya açtık
