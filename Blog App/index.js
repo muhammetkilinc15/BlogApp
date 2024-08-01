@@ -3,6 +3,10 @@ const path = require('path');
 const app = express();
 const userRouter = require('./routes/user'); // user.js dosyanızı dahil edin
 
+// formlardan gelen veriler için gerekli
+app.use(express.urlencoded({extended:false}));
+
+
 // Görünüm motorunu ayarlayın
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
