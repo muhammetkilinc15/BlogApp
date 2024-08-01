@@ -9,24 +9,40 @@
     <div class="container mt-3">
       <div class="row">
         <div class="col-md-12 mt-3">
+          <% if (action !="undefined" && action=="edit") { %>
+            <div class="alert alert-success">
+              Blog Güncellendi
+            </div>
+          <% } %>
+          <% if (action !="undefined" && action=="create") { %>
+            <div class="alert alert-success">
+              Blog Eklendi
+            </div>
+          <% } %>
+          <% if (action !="undefined" && action=="delete") { %>
+            <div class="alert alert-danger">
+              Blog Silindi
+            </div>
+          <% } %>
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th style="width: 50px;">Id</th>
+                <th style="width: 50px;"><b>#</b></th>
                 <th style="width: 150px;">Resim</th>   
                 <th >Başlık</th> 
                 <th style="width: 130px;">Detay</th>  
               </tr>
             </thead>
             <tbody>
+              <% let counter=1 %>
               <% blogs.forEach(item => { %>
               <tr>
-                <td><%= item.idblog %></td>
+                <td><%= counter++ %></td>
                 <td> <img src="/static/images/<%= item.Image %>" class="img-fluid"></td>
                 <td><%= item.Title %></td>
                 <td>
                     <a href="/admin/blogs/<%= item.idblog %>" class="btn btn-sm btn-primary">Edit</a>
-                    <a href="/admin/blogs/<%= item.idblog %>" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="/admin/blog/delete/<%= item.idblog %>" class="btn btn-sm btn-danger">Delete</a>
                 </td>
 
             </tr>
