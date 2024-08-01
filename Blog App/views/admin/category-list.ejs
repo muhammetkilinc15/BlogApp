@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../partials/head") %>
+  </head>
+  <body>
+
+
+
+    <%- include("../partials/nav") %>
+
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-md-12 mt-3">
+          <% if (action !="undefined" && action=="edit") { %>
+            <div class="alert alert-success">
+              Kategory Güncellendi
+            </div>
+          <% } %>
+          <% if (action !="undefined" && action=="create") { %>
+            <div class="alert alert-success">
+                Kategory Eklendi
+            </div>
+          <% } %>
+          <% if (action !="undefined" && action=="delete") { %>
+            <div class="alert alert-danger">
+                Kategory Silindi
+            </div>
+          <% } %>
+
+         
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width: 50px;"><b>#</b></th>
+                <th >Adı</th>   
+              </tr>
+            </thead>
+            <tbody>
+               <!-- Sayaç başlat -->
+              <% let counter = 1; %>
+              <% categories.forEach(item => { %>
+              <tr>
+                <td><%= counter++ %></td>
+                <td><%= item.Name %></td>
+                <td>
+                    <a href="/admin/categories/<%= item.idCategory %>" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="/admin/categories/delete/<%= item.idCategory %>" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
