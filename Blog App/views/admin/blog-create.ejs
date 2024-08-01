@@ -9,7 +9,7 @@
     <div class="container mt-3">
       <div class="row">
         <div class="col-md-12 mt-3">
-          <form action="">
+          <form action="" method="post">
             <div class="row mb-3">
               <label for="title" class="col-sm-2 col-form-label">Başlık</label>
               <div class="col-sm-8">
@@ -27,7 +27,7 @@
               >
               <div class="col-sm-8">
                 <textarea
-                  name="description"
+                  name="Description"
                   rows="10"
                   class="form-control"
                 ></textarea>
@@ -39,8 +39,8 @@
                 <input
                   type="text"
                   class="form-control"
-                  name="image"
-                  id="image"
+                  name="Image"
+                  id="Image"
                 />
               </div>
             </div>
@@ -53,7 +53,7 @@
                 <select name="category" id="category" class="form-select">
                   <option value="-1" selected>Seçiniz</option>
                   <% categories.forEach(element => { %>
-                    <option value="element.idCategory"><%= element.Name %></option>
+                    <option value="<%= element.idCategory %>"><%= element.Name %></option>
                   <% }) %>  
                 </select>
               </div>
@@ -81,8 +81,8 @@
                   <input
                     type="checkbox"
                     class="form-check-input"
-                    id="mainPage"
-                    name="mainPage"
+                    id="isApproved"
+                    name="isApproved"
                   />
                   <label type="checkbox" class="form-check-lbel" id="isApproved" name="isApproved">
                     Onay</label
