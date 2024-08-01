@@ -4,6 +4,8 @@ const db = require("../data/db");
 
 
 // Kategorilere ait kurslar getirildi
+
+// ************************************** Get Course with by Category **************************************
 router.use("/blogs/category/:idCategory", async (req, res) => {
   const id = req.params.idCategory;
   try {
@@ -21,7 +23,7 @@ router.use("/blogs/category/:idCategory", async (req, res) => {
 
 });
 
-// Bir kursa ait detaya gittik
+// ************************************** Go to Course Detail with its id **************************************
 router.get("/blogs/:blogid", async function (req, res) {
   const id = req.params.blogid;
   try {
@@ -40,7 +42,7 @@ router.get("/blogs/:blogid", async function (req, res) {
   }
 });
 
-// Tüm Kursları blogs sayfasında listeledik. async ve await ile kullandık
+// ************************************** All Course Listed **************************************
 router.get("/blogs", async function (req, res) {
   try {
     const [blogs] = await db.execute("select * from blog where isApproved=1");
@@ -56,7 +58,7 @@ router.get("/blogs", async function (req, res) {
   }
 });
 
-// Ana Sayfada Gerekli kursları listeledik
+// ************************************** Listed Couse for Main Page **************************************
 router.get("/", async function (req, res) {
   try {
     const [blogs] = await db.execute(
@@ -74,9 +76,11 @@ router.get("/", async function (req, res) {
   }
 });
 
-// error route
+// ************************************** Error Page **************************************
 router.get("/error", function (req, res) {
-  res.render("../Views/Error/error", { title: "Error" });
+  res.render("../Views/Error/error", 
+    { title: "Error" }
+  );
 });
 
 module.exports = router; // Dışarıya açtık
