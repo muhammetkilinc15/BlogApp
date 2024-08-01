@@ -1,12 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    admin blog edit
-</body>
+  <head>
+    <%- include("../partials/head") %>
+  </head>
+  <body>
+    <%- include("../partials/nav") %>
+
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-md-12 mt-3">
+          <form action="" method="post">
+            <input  type="hidden" value="<%= blog.idblog %>" name="idblog">
+            <div class="row mb-3">
+              <label for="Title" class="col-sm-2 col-form-label">Başlık</label>
+              <div class="col-sm-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="Title"
+                  name="Title"
+                  value="<%= blog.Title %>"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="title" class="col-sm-2 col-form-label"
+                >Açıklama</label
+              >
+              <div class="col-sm-8">
+                <textarea
+                  name="Description"
+                  rows="10"
+                  class="form-control"   
+                ><%= blog.Description %></textarea>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="Image" class="col-sm-2 col-form-label">Image</label>
+              <div class="col-sm-8">
+                <input
+                  type="text"
+                  value="<%= blog.Image %>"
+                  class="form-control"
+                  name="Image"
+                  id="Image"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label for="title" class="col-sm-2 col-form-label"
+                >Kategori</label
+              >
+              <div class="col-sm-8">
+                <select name="category" id="category" class="form-select">
+                  <option value="-1" selected>Seçiniz</option>
+                  <% categories.forEach(element => { %>
+                    
+                  
+                    <% if (blog.categoryId==element.idCategory) { %>
+                      <option value="<%= element.idCategory %>" selected><%= element.Name %></option>
+                    
+                      <% } else { %>
+                      <option value="<%= element.idCategory %>"><%= element.Name %></option>
+                    <% } %>   
+                  <% }) %>  
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-10 offset-sm-2">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="mainPage"
+                    name="mainPage"
+                    <%= blog.mainPage ? "checked":"" %>
+                  />
+                  <label type="checkbox" class="form-check-label" id="mainPage"> 
+                    Ana Sayfa</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-10 offset-sm-2">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="isApproved"
+                    name="isApproved"
+                    <%= blog.isApproved ? "checked":"" %>
+                  />
+                  <label type="checkbox" class="form-check-label" id="isApproved" >
+                    Onay</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-8 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
