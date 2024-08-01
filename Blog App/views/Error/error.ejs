@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <head>
+        <%- include("../partials/head")  %> 
+    </head>
 </head>
 <body>
-    <h2>Girdiniğiniz değere ait bir veri bulunamadı</h2>
+    <div class="container alert alert-danger">
+        <h1 class="text-center">OOPS!!!</h1>
+        <p>Somethings is wrong</p>
+        <a href="/blogs">Go to Main Page</a>
+    </div>
 </body>
 </html>
