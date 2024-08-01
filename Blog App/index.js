@@ -27,6 +27,7 @@ app.use("/static", express.static("public")); // Public klasörü
 
 app.use("/admin",adminRoutes); // diyerek /admin uzantılı ile baslattık
 app.use(userRoutes);
+//app.use(adminRoutes)
 
 
 
