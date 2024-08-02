@@ -16,7 +16,7 @@
                 <h1 class="h3 mb-3"> <%= title %> </h1>
 
                 <% blogs.forEach(blog => { %>
-                        <%- include("../partials/blog-card", blog)  %> 
+                        <%- include("../partials/blog-card", {blog})  %> 
                 <% }) %>
              
             </div>
