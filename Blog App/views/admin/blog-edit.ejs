@@ -9,8 +9,9 @@
     <div class="container mt-3">
       <div class="row">
         <div class="col-md-12 mt-3">
-          <form action="" method="post">
+          <form action="" method="post" enctype="multipart/form-data">
             <input  type="hidden" value="<%= blog.idblog %>" name="idblog">
+            <input type="hidden" name="Image" value="<%= blog.Image %>">
             <div class="row mb-3">
               <label for="Title" class="col-sm-2 col-form-label">Başlık</label>
               <div class="col-sm-8">
@@ -38,8 +39,9 @@
             <div class="row mb-3">
               <label for="Image" class="col-sm-2 col-form-label">Image</label>
               <div class="col-sm-8">
+                <img src="/static/images/<%= blog.Image %>" alt="" width="120px">
                 <input
-                  type="text"
+                  type="file"
                   value="<%= blog.Image %>"
                   class="form-control"
                   name="Image"
