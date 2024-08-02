@@ -16,8 +16,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', userRouter); // userRouter'ı kullanın
 
 
-
-
 // user router ekledik
 const userRoutes = require("./routes/user.js");
 const adminRoutes = require("./routes/admin.js")
