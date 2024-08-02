@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
-
 const db = require("../data/db");
-const { title } = require("process");
+
+const imageUpload = require("../helpers/image-upload")
 
 //! ########################## Category Operations ##########################
 // ************************************** Remove Category **************************************
@@ -151,10 +151,11 @@ router.get("/blog/create", async function (req, res) {
   }
 });
 
-router.post("/blog/create", async function (req, res) {
+
+router.post("/blog/create", imageUpload.upload.single("Image"),async function (req, res) {
   const title = req.body.title;
   const description = req.body.Description;
-  const image = req.body.Image;
+  const image = req.file.filename;
   const category = req.body.category;
   const mainPage = req.body.mainPage == "on" ? 1 : 0;
   const isApproved = req.body.isApproved == "on" ? 1 : 0;
@@ -192,15 +193,19 @@ router.get("/blogs/:blogid", async (req, res) => {
   }
 });
 
-router.post("/blogs/:blogid", async (req, res) => {
+router.post("/blogs/:blogid",imageUpload.upload.single("Image") , async (req, res) => {
   const idblog = req.body.idblog;
   const title = req.body.Title;
   const description = req.body.Description;
-  const image = req.body.Image;
+  let image = req.body.Image;
   const category = req.body.category;
-  console.log(req.body.mainPage);
   const mainPage = req.body.mainPage == "on" ? 1 : 0;
   const isApproved = req.body.isApproved == "on" ? 1 : 0;
+  // if user select a picture, change the your picture path
+    if(req.file){
+      image = req.file.filename
+    }
+
   try {
     await db.execute(
       "update blog set Title=?,Description=?,Image=?,categoryId=?,mainPage=?,isApproved=? where idblog=?",
