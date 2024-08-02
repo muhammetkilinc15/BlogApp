@@ -1,9 +1,11 @@
+// Database settings 
+
 const config = {
     db: {
         host: "localhost",
         user: "root",
         password: "141021Bemu",
-        database: "blogapp"
+        database: "blogdb"
     }
 };
 
