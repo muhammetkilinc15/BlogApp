@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <%- include("../partials/head") %>
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.2/classic/styles.css">
   </head>
   <body>
     <%- include("../partials/nav") %>
@@ -25,6 +26,15 @@
               </div>
             </div>
             <div class="row mb-3">
+              <label for="SubTitle" class="col-sm-2 col-form-label">altbaslik</label>
+              <div class="col-sm-8">
+                  <textarea name="SubTitle" class="form-control" rows="5">
+                      <%= blog.SubTitle %>
+                  </textarea>
+              </div>
+          </div>
+
+            <div class="row mb-3">
               <label for="title" class="col-sm-2 col-form-label"
                 >Açıklama</label
               >
@@ -32,7 +42,8 @@
                 <textarea
                   name="Description"
                   rows="10"
-                  class="form-control"   
+                  class="form-control"
+                  id="editor"   
                 ><%= blog.Description %></textarea>
               </div>
             </div>
@@ -113,5 +124,7 @@
         </div>
       </div>
     </div>
+  
+    <%- include('../partials/ck-editor.ejs') %>
   </body>
 </html>

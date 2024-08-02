@@ -21,6 +21,16 @@
                 />
               </div>
             </div>
+
+            <div class="row mb-3">
+              <label for="subtitle" class="col-sm-2 col-form-label">Alt Başlık</label>
+              <div class="col-sm-8">
+                  <textarea name="subtitle" class="form-control" rows="5">
+                  
+                  </textarea>
+              </div>
+          </div>
+
             <div class="row mb-3">
               <label for="title" class="col-sm-2 col-form-label"
                 >Açıklama</label
@@ -30,6 +40,7 @@
                   name="Description"
                   rows="10"
                   class="form-control"
+                  id="editor"
                 ></textarea>
               </div>
             </div>
@@ -99,5 +110,6 @@
         </div>
       </div>
     </div>
+    <%- include('../partials/ck-editor.ejs') %>
   </body>
 </html>
