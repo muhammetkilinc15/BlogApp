@@ -5,7 +5,9 @@ const db = require("../data/db");
 
 const imageUpload = require("../helpers/image-upload")
 
-//! ########################## Category Operations ##########################
+const fs = require("fs"); // Deleted file 
+
+                    //! ########################## Category Operations ##########################
 // ************************************** Remove Category **************************************
 
 router.get("/categories/delete/:categoryId", async (req, res) => {
@@ -106,7 +108,7 @@ router.get("/categories", async (req, res) => {
   }
 });
 
-//! ########################## Blog Operations ##########################
+                      //! ########################## Blog Operations ##########################
 
 // ************************************** Remove Blog **************************************
 
@@ -154,6 +156,7 @@ router.get("/blog/create", async function (req, res) {
 
 router.post("/blog/create", imageUpload.upload.single("Image"),async function (req, res) {
   const title = req.body.title;
+  const subtitle = req.body.subtitle;
   const description = req.body.Description;
   const image = req.file.filename;
   const category = req.body.category;
@@ -161,8 +164,8 @@ router.post("/blog/create", imageUpload.upload.single("Image"),async function (r
   const isApproved = req.body.isApproved == "on" ? 1 : 0;
   try {
     await db.execute(
-      "insert into blog (Title,Description,Image,mainPage,isApproved,categoryId) values(?,?,?,?,?,?)",
-      [title, description, image, mainPage, isApproved, category]
+      "insert into blog (Title,Description,Image,mainPage,isApproved,categoryId,SubTitle) values(?,?,?,?,?,?)",
+      [title, description, image, mainPage, isApproved, category,subtitle]
     );
     res.redirect("/admin/blogs?action=create");
   } catch (err) {
@@ -196,6 +199,7 @@ router.get("/blogs/:blogid", async (req, res) => {
 router.post("/blogs/:blogid",imageUpload.upload.single("Image") , async (req, res) => {
   const idblog = req.body.idblog;
   const title = req.body.Title;
+  const subtitle = req.body.SubTitle;
   const description = req.body.Description;
   let image = req.body.Image;
   const category = req.body.category;
@@ -204,12 +208,15 @@ router.post("/blogs/:blogid",imageUpload.upload.single("Image") , async (req, re
   // if user select a picture, change the your picture path
     if(req.file){
       image = req.file.filename
+      fs.unlink("./public/images/" + req.body.Image, err=>{
+        console.log(err);
+      })
     }
 
   try {
     await db.execute(
-      "update blog set Title=?,Description=?,Image=?,categoryId=?,mainPage=?,isApproved=? where idblog=?",
-      [title, description, image, category, mainPage, isApproved, idblog]
+      "update blog set Title=?,Description=?,Image=?,categoryId=?,mainPage=?,isApproved=?,SubTitle=? where idblog=?",
+      [title, description, image, category, mainPage, isApproved, subtitle,idblog]
     );
     return res.redirect("/admin/blogs?action=edit");
   } catch (err) {
