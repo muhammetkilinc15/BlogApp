@@ -3,11 +3,6 @@ const sequelize = require("../data/db") // database
 
 
 const Blog = sequelize.define('blog',{
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
     Title : {
         type : DataTypes.STRING,
         allowNull: false
@@ -31,17 +26,13 @@ const Blog = sequelize.define('blog',{
     isApproved : {
         type : DataTypes.BOOLEAN,
         allowNull: false
-    },
-    categoryId :{
-        type: DataTypes.INTEGER,
-        allowNull: false
     }
 })
 
 
-async function sync() {
-    await Blog.sync({alter: true })  
-}
-sync();
+// async function sync() {
+//     await Blog.sync({alter: true })  
+// }
+// sync();
 module.exports = Blog;
 

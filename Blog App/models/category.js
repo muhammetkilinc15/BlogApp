@@ -4,11 +4,6 @@ const { name } = require("ejs");
 
 const Category = sequelize.define("category",
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     Name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -19,8 +14,8 @@ const Category = sequelize.define("category",
   }
 );
 
-async function sync() {
-  await Category.sync({ alter: true });
-}
-sync();
+// async function sync() {
+//   await Category.sync({ alter: true });
+// }
+// sync();
 module.exports = Category;
