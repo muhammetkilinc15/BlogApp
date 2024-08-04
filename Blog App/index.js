@@ -18,7 +18,8 @@ app.use('/', userRouter); // userRouter'ı kullanın
 
 // user router ekledik
 const userRoutes = require("./routes/user.js");
-const adminRoutes = require("./routes/admin.js")
+const adminRoutes = require("./routes/admin.js");
+const { Sequelize } = require('sequelize');
 app.use("/libs", express.static('node_modules')); // Bootstrap kullanmak
 app.use("/static", express.static("public")); // Public klasörü
 
@@ -26,6 +27,31 @@ app.use("/static", express.static("public")); // Public klasörü
 app.use("/admin",adminRoutes); // diyerek /admin uzantılı ile baslattık
 app.use(userRoutes);
 //app.use(adminRoutes)
+
+
+const sequelize = require("./data/db.js")
+const dumyData = require("./data/dummy_data.js")
+
+const Category = require("./models/category.js")
+const Blog = require("./models/blog.js")
+
+// İlişkiler
+ // one to many
+Category.hasMany(Blog,{
+  name : "categoryId",
+  allowNull: false,
+  defaultValu : 1
+});
+Blog.belongsTo(Category);
+
+
+
+(async ()=>{
+ 
+  await sequelize.sync({alter : true})
+  //  await dumyData();
+})()
+
 
 
 
