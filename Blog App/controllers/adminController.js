@@ -261,7 +261,13 @@ exports.post_blog_edit = async (req, res) => {
 
 exports.get_blog_list = async function (req, res) {
     try {
-      const blogs = await Blog.findAll();
+      const blogs = await Blog.findAll({
+        attributes : ["id","Title","Image","SubTitle","Image"],
+        include: {
+          model : Category,
+          attributes : ["Name"]
+        }
+      });
       res.render("admin/blog-list", {
         title: "Blog-List",
         blogs: blogs,
