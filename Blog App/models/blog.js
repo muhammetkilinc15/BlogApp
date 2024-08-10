@@ -1,5 +1,6 @@
 const {DataTypes} = require("sequelize")
-const sequelize = require("../data/db") // database 
+const sequelize = require("../data/db"); // database 
+const { FORCE } = require("sequelize/lib/index-hints");
 
 
 const Blog = sequelize.define('blog',{
@@ -31,8 +32,9 @@ const Blog = sequelize.define('blog',{
 
 
 // async function sync() {
-//     await Blog.sync({alter: true })  
+//     await Blog.sync({force: true })  
 // }
 // sync();
+
 module.exports = Blog;
 

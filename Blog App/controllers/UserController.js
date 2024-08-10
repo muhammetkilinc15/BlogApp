@@ -6,8 +6,12 @@ exports.blog_by_category = async (req, res) => {
   try {
     const blogs = await Blog.findAll({
       where: {
-        categoryId: id,
+       isApproved : true
       },
+      include : {
+        model : Category,
+        where : {id : id}
+      }
     });
     const categories = await Category.findAll();
     res.render("users/blogs", {

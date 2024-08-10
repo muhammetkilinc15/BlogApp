@@ -1,21 +1,24 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../data/db"); // database
-const { name } = require("ejs");
 
-const Category = sequelize.define("category",
-  {
-    Name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+const Category = sequelize.define("category", {
+  Name: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  {
-    timestamps: false, // created and updated eklenmez
-  }
-);
+}, {
+  timestamps: false, // createdAt ve updatedAt eklenmez
+});
 
 // async function sync() {
-//   await Category.sync({ alter: true });
+//   try {
+//     await Category.sync({ force: true }); // 'force: true' olarak düzeltilmiş
+//     console.log("Category tablosu başarıyla senkronize edildi.");
+//   } catch (error) {
+//     console.error("Kategori tablosu senkronize edilirken bir hata oluştu:", error);
+//   }
 // }
+
 // sync();
+
 module.exports = Category;

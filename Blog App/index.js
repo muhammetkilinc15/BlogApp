@@ -19,7 +19,6 @@ app.use('/', userRouter); // userRouter'ı kullanın
 // user router ekledik
 const userRoutes = require("./routes/user.js");
 const adminRoutes = require("./routes/admin.js");
-const { Sequelize } = require('sequelize');
 app.use("/libs", express.static('node_modules')); // Bootstrap kullanmak
 app.use("/static", express.static("public")); // Public klasörü
 
@@ -31,26 +30,41 @@ app.use(userRoutes);
 
 const sequelize = require("./data/db.js")
 const dumyData = require("./data/dummy_data.js")
-
-const Category = require("./models/category.js")
-const Blog = require("./models/blog.js")
+const Blog = require('./models/blog');
+const Category = require('./models/category');
+const BlogCategory = require("./models/BlogCategory.js");
+const { FORCE } = require('sequelize/lib/index-hints');
 
 // İlişkiler
- // one to many
-Category.hasMany(Blog,{
-  name : "categoryId",
-  allowNull: false,
-  defaultValu : 1
-});
-Blog.belongsTo(Category);
+
+// One-to-Many ilişki tanımlamaları
+
+      // Category.hasMany(Blog, {
+      //   foreignKey: {
+      //       allowNull: false
+      //   }
+      // });
+      // Blog.belongsTo(Category, {
+      //   foreignKey: {
+      //       allowNull: false
+      //   }
+      // });
+
+// Many-to-Many ilişki tanımlamaları
+ Blog.belongsToMany(Category, { through: BlogCategory });
+ Category.belongsToMany(Blog, { through: BlogCategory });
 
 
-
-(async ()=>{
- 
-  await sequelize.sync({alter : true})
-  //  await dumyData();
-})()
+// Veritabanı senkronizasyonu
+(async () => {
+    await sequelize.sync({ force: true });
+    try{
+      // await dummyData();
+    }catch(e){
+      console.log(e)
+    }
+      
+})();
 
 
 

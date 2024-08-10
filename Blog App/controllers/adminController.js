@@ -1,6 +1,6 @@
 const Blog = require("../models/blog");
 const Category = require("../models/category");
-
+const BlogCateegory = require("../models/BlogCategory");
 const fs = require("fs");
 
 exports.get_category_delete = async (req, res) => {

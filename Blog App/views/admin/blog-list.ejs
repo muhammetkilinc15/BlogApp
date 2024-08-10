@@ -41,7 +41,11 @@
                 <td><%= counter++ %></td>
                 <td> <img src="/static/images/<%= item.Image %>" class="img-fluid"></td>
                 <td><%= item.Title %></td>
-                <td><%= item.category.Name %></td>
+                <%= blog.categories.array.forEach(category => {
+                  <td><%= category.Name %></td>
+                });  %>
+                
+                
                 <td>
                     <a href="/admin/blogs/<%= item.id %>" class="btn btn-sm btn-primary">Edit</a>
                     <a href="/admin/blog/delete/<%= item.id %>" class="btn btn-sm btn-danger">Delete</a>
