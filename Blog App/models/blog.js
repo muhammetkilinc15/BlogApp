@@ -1,40 +1,37 @@
-const {DataTypes} = require("sequelize")
-const sequelize = require("../data/db"); // database 
-const { FORCE } = require("sequelize/lib/index-hints");
+const { DataTypes } = require("sequelize");
+const sequelize = require("../data/db");
 
-
-const Blog = sequelize.define('blog',{
-    Title : {
-        type : DataTypes.STRING,
+const Blog = sequelize.define("blog", {
+    baslik: {
+        type: DataTypes.STRING,
         allowNull: false
     },
-    SubTitle : {
-        type : DataTypes.STRING,
+    url: {
+        type: DataTypes.STRING,
         allowNull: false
     },
-    Description : {
-        type : DataTypes.TEXT,
+    altbaslik: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    aciklama: {
+        type: DataTypes.TEXT,
         allowNull: true
     },
-    Image : {
-        type : DataTypes.STRING,
+    resim: {
+        type: DataTypes.STRING,
         allowNull: false
     },
-    mainPage : {
-        type : DataTypes.BOOLEAN,
+    anasayfa: {
+        type: DataTypes.BOOLEAN,
         allowNull: false
     },
-    isApproved : {
-        type : DataTypes.BOOLEAN,
+    onay: {
+        type: DataTypes.BOOLEAN,
         allowNull: false
     }
-})
-
-
-// async function sync() {
-//     await Blog.sync({force: true })  
-// }
-// sync();
+}, {
+    timestamps: true
+});
 
 module.exports = Blog;
-
