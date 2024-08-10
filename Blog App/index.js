@@ -1,9 +1,22 @@
 const express = require("express");
 
 const app = express();
+const cookieParser = require("cookie-parser")
+const session = require("express-session");
+app.use(session({
+    secret : "hello world",
+    resave: false, // değişiklik yapınca session güncellenir
+    saveUninitialized : false ,
+    cookie:{
+        maxAge : 1000 * 60 * 60 * 24
+    }
+    
+}));
+app.use(cookieParser());
 
-app.set("view engine", "ejs");
 
+
+app.set("view engine", "ejs"); // ejs kullabilmek için
 // body-parser
 app.use(express.urlencoded({ extended: false }));
 
