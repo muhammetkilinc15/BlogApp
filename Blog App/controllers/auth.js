@@ -69,8 +69,11 @@ exports.post_login = async function(req, res) {
 
         if(match) {
             // login olduk.
-
+            
+            // cookie
+            // res.cookie("isAuth",1)
             // session
+            req.session.isAuth=1;
             return res.redirect("/");
         } 
         
@@ -78,6 +81,18 @@ exports.post_login = async function(req, res) {
             title: "login",
             message: "parola hatalı"
         });     
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+exports.get_logout = async function(req,res){
+    try {
+        // res.clearCookie("isAuth") // cookie silerken
+
+        await req.session.destroy()
+        return res.redirect("/account/login");
     }
     catch(err) {
         console.log(err);
