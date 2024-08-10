@@ -58,6 +58,7 @@ exports.blog_list = async function(req, res) {
 }
 
 exports.index = async function(req, res) {
+    console.log(req.cookies)
     try {
         const blogs = await Blog.findAll({
             where: {
@@ -74,7 +75,9 @@ exports.index = async function(req, res) {
             title: "Popüler Kurslar",
             blogs: blogs,
             categories: categories,
-            selectedCategory: null
+            selectedCategory: null,
+            // isAuth : req.cookies.isAuth // cookie ile alırken
+            isAuth : req.session.isAuth
         })
     }
     catch(err) {
