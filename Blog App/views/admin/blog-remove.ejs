@@ -14,6 +14,7 @@
                 <b><%= blog.Title %></b><br>İsimli blog kaydını silmek istiyor musunuz?
             </p>
             <form method="post">
+              <input type="hidden" name="_csrf" value="<%= crfToken %>">
                 <input type="hidden" name="id" value="<%= blog.id %>">
                 <button type="submit" class="btn btn-danger">Evet</button>
                 <a href="/admin/blogs" class="btn btn-primary">Vazgeç</a>
