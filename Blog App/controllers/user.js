@@ -17,7 +17,8 @@ exports.blogs_details = async function(req, res) {
         if(blog) {
             return res.render("users/blog-details", {
                 title: blog.baslik,
-                blog: blog
+                blog: blog,
+              
             });
         }
         res.redirect("/");
@@ -49,7 +50,7 @@ exports.blog_list = async function(req, res) {
             currentPage : page,
             totalItems : count,
             categories: categories,
-            selectedCategory: slug
+            selectedCategory: slug,     
         })
     }
     catch(err) {
@@ -77,7 +78,7 @@ exports.index = async function(req, res) {
             categories: categories,
             selectedCategory: null,
             // isAuth : req.cookies.isAuth // cookie ile alırken
-            isAuth : req.session.isAuth
+            // isAuth : req.session.isAuth
         })
     }
     catch(err) {
