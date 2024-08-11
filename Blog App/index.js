@@ -5,6 +5,7 @@ const app = express();
 const cookieParser = require("cookie-parser")
 const session = require("express-session");
 const sequelizeStore  = require("connect-session-sequelize")(session.Store);
+const csurf = require("csurf")
 
 // routers
 const userRoutes = require("./routes/user");
@@ -45,7 +46,7 @@ app.use(session({
 }));
 
 app.use(locals);
-
+app.use(csurf()) // her yerde kullanmak istemediğimiz içn
 
 
 
