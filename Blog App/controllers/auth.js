@@ -1,5 +1,4 @@
 const User = require("../models/user");
-
 const bcrypt  = require("bcrypt")
 
 
@@ -48,7 +47,8 @@ exports.get_login = async function(req, res) {
     try {
         return res.render("auth/login", {
             title: "login",
-            message : message
+            message : message,
+
         });
     }
     catch(err) {
