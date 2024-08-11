@@ -73,7 +73,8 @@ exports.post_login = async function(req, res) {
             // cookie
             // res.cookie("isAuth",1)
             // session
-            req.session.isAuth=1;
+            req.session.isAuth=true;
+            req.session.fullName = user.fullName;
             return res.redirect("/");
         } 
         
