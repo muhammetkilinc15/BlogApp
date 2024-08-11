@@ -21,12 +21,19 @@ exports.post_register = async function (req, res) {
 
     const hashedPassword = await bcrypt.hash(password,10);
     try {
-        console.log(fullname, email, password);  
+        const user = await User.findOne({where:{email:email}})
+        if(user){
+            req.session.message = {text:"Girdiğiniz email adresi başka kullanıcıya ait", class :"warning"}
+            return res.redirect("login")
+        }
+
         await User.create({
             fullName: fullname,
             email: email,
             password: hashedPassword
         });
+    
+        req.session.message ={text:"Yeni hesabınız ile giriş yapabilirsiniz", class :"success"}
 
         return res.redirect("login");
     } catch (e) {
@@ -36,9 +43,12 @@ exports.post_register = async function (req, res) {
 
 // **************************** Login işlemleri için get -post  ****************************
 exports.get_login = async function(req, res) {
+    const message = req.session.message;
+    delete req.session.message;
     try {
         return res.render("auth/login", {
-            title: "login"
+            title: "login",
+            message : message
         });
     }
     catch(err) {
@@ -60,7 +70,7 @@ exports.post_login = async function(req, res) {
         if(!user) {
             return res.render("auth/login", {
                 title: "login",
-                message: "email hatalı"
+                message: {text:"email hatalı",class:"danger"}
             });
         }
 
@@ -75,12 +85,13 @@ exports.post_login = async function(req, res) {
             // session
             req.session.isAuth=true;
             req.session.fullName = user.fullName;
-            return res.redirect("/");
+            const url = req.query.returnUrl || "/"
+            return res.redirect(url);
         } 
         
         return res.render("auth/login", {
-            title: "login",
-            message: "parola hatalı"
+            title: "login", 
+            message: {text:"parola hatalı",class:"danger"}
         });     
     }
     catch(err) {
