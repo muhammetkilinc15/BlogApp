@@ -5,6 +5,8 @@ const sequelize = require("../data/db");
 const slugField = require("../helpers/slugfield");
 
 const fs = require("fs");
+const { url } = require("inspector");
+const { default: slugify } = require("slugify");
 
 exports.get_blog_delete = async function(req, res){
     const blogid = req.params.blogid;
@@ -24,7 +26,6 @@ exports.get_blog_delete = async function(req, res){
         console.log(err); 
     }
 }
-
 exports.post_blog_delete = async function(req, res) {
     const blogid = req.body.blogid;
     try {
@@ -55,7 +56,6 @@ exports.get_category_delete = async function(req, res){
         console.log(err);
     }
 }
-
 exports.post_category_delete = async function(req, res) {
     const categoryid = req.body.categoryid;
     try {
@@ -84,7 +84,6 @@ exports.get_blog_create = async function(req, res) {
         console.log(err);
     }
 }
-
 exports.post_blog_create = async function(req, res) {
     const baslik = req.body.baslik;
     const altbaslik = req.body.altbaslik;
@@ -110,6 +109,7 @@ exports.post_blog_create = async function(req, res) {
     }
 }
 
+
 exports.get_category_create = async function(req, res) {
     try {
         res.render("admin/category-create", {
@@ -120,17 +120,17 @@ exports.get_category_create = async function(req, res) {
         console.log(err);
     }
 }
-
 exports.post_category_create = async function(req, res) {
     const name = req.body.name;
     try {
-        await Category.create({ name: name });
+        await Category.create({ name: name , url: slugField(name) });
         res.redirect("/admin/categories?action=create");
     }
     catch(err) {
         console.log(err);
     }
 }
+
 
 exports.get_blog_edit = async function(req, res) {
     const blogid = req.params.blogid;
@@ -161,7 +161,6 @@ exports.get_blog_edit = async function(req, res) {
         console.log(err);
     }
 }
-
 exports.post_blog_edit = async function(req, res) {
     const blogid = req.body.blogid;
     const baslik = req.body.baslik;
