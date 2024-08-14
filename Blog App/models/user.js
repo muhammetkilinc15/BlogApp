@@ -13,6 +13,14 @@ const User = sequelize.define("User",{
     password : {
         type : DataTypes.STRING,
         allowNull : false
+    },
+    resetToken : {
+        type : DataTypes.STRING,
+        allowNull: true,
+    },
+    resetTokenExperation : {
+        type : DataTypes.STRING,
+        allowNull: true
     }
 }, {timestamps : true});
 
