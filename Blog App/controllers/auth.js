@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const emailService = require("../helpers/send-mail");
 const config = require("../config");
 const crypto = require("crypto");
-const { where } = require("sequelize");
+const { Op } = require("sequelize");
 const { text } = require("express");
 
 // **************************** Register işlemleri için get -post  ****************************
@@ -137,35 +137,100 @@ exports.get_reset = async (req, res) => {
   }
 };
 exports.post_reset = async (req, res) => {
-    const email = req.body.email;
+  const email = req.body.email;
 
-    try {
-        const user = await User.findOne({ where: { email: email }}); 
-        if(!user) {
-            req.session.message = { text: "Email adresine sahip kullanıcı bulunamadı", class: "danger"};
-            return res.redirect("reset-password");
-        }
-        var token = crypto.randomBytes(32).toString("hex");
-        user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + (1000 * 60 * 60);
-        await user.save();
+  try {
+    const user = await User.findOne({ where: { email: email } });
+    if (!user) {
+      req.session.message = {
+        text: "Email adresine sahip kullanıcı bulunamadı",
+        class: "danger",
+      };
+      return res.redirect("reset-password");
+    }
+    var token = crypto.randomBytes(32).toString("hex");
+    user.resetToken = token;
+    user.resetTokenExpiration  = (Date.now() + 1000 * 60 * 60);
+    await user.save();
 
-        emailService.sendMail({
-            from: config.email.from,
-            to: email,
-            subject: "Reset Password",
-            html: `
+    emailService.sendMail({
+      from: config.email.from,
+      to: email,
+      subject: "Reset Password",
+      html: `
                 <p>Parolanızı güncellemek için aşağıdaki linke tıklayınız.</p>
                 <p>
-                    <a href="http://127.0.0.1:3000/account/reset-password/${token}">Parola Sıfırla<a/>
+                    <a href="http://127.0.0.1:5000/account/new-password/${token}">Parola Sıfırla<a/>
                 </p>
-            `
-        });
+            `,
+    });
 
-        req.session.message = { text: "parolanızı sıfırlamak için eposta adresinizi kontrol ediniz.", class: "success"};
-        res.redirect("login");
+    req.session.message = {
+      text: "parolanızı sıfırlamak için eposta adresinizi kontrol ediniz.",
+      class: "success",
+    };
+    res.redirect("login");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// **************************** Yeni Şifre Token ile için get -post  ****************************
+exports.get_newpassword = async (req, res) => {
+  const token = req.params.token;
+  console.log(token)
+  try {
+    const user = await User.findOne({
+      where: {
+        resetToken: token,
+        resetTokenExpiration : {
+          [Op.gt]: Date.now(),
+        },
+      },
+    });
+
+    return res.render("auth/new-password", {
+      title: "new password",
+      token: token,
+      userId: user.id
+  });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.post_newpassword = async (req, res) => {
+  const token = req.body.token;
+  const userId = req.body.userId;
+  const newPassword = req.body.password;
+  try {
+    const user = await User.findOne({
+      where: {
+        resetToken: token,
+        resetTokenExpiration: {
+          [Op.gt]: Date.now(),
+        },
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      req.session.message = {
+        text: "Parolayı güncelleme işlemini yapamıyoruz",
+        class: "danger",
+      };
+      return res.redirect("login")
     }
-    catch(err) {
-        console.log(err);
-    }
+    user.password = await bcrypt.hash(newPassword,"10");
+    user.resetToken = null;
+    user.resetTokenExpiration   = null;
+    await user.save();
+    req.session.message = {
+      text: "Parolanız başarılı şekilde güncellendi",
+      class: "success",
+    };
+    return res.redirect("login");
+  } catch (err) {
+    console.log(err);
+  }
 };
