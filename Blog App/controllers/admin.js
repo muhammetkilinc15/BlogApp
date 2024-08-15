@@ -5,8 +5,7 @@ const sequelize = require("../data/db");
 const slugField = require("../helpers/slugfield");
 
 const fs = require("fs");
-const { url } = require("inspector");
-const { default: slugify } = require("slugify");
+
 
 exports.get_blog_delete = async function(req, res){
     const blogid = req.params.blogid;
@@ -35,36 +34,6 @@ exports.post_blog_delete = async function(req, res) {
             return res.redirect("/admin/blogs?action=delete");
         }
         res.redirect("/admin/blogs");
-    }
-    catch(err) {
-        console.log(err);
-    }
-}
-
-exports.get_category_delete = async function(req, res){
-    const categoryid = req.params.categoryid;
-
-    try {
-        const category = await Category.findByPk(categoryid);
-
-        res.render("admin/category-delete", {
-            title: "delete category",
-            category: category
-        });
-    }
-    catch(err) {
-        console.log(err);
-    }
-}
-exports.post_category_delete = async function(req, res) {
-    const categoryid = req.body.categoryid;
-    try {
-        await Category.destroy({
-            where: {
-                id: categoryid
-            }
-        });
-        res.redirect("/admin/categories?action=delete");
     }
     catch(err) {
         console.log(err);
@@ -108,30 +77,6 @@ exports.post_blog_create = async function(req, res) {
         console.log(err);
     }
 }
-
-
-exports.get_category_create = async function(req, res) {
-    try {
-        res.render("admin/category-create", {
-            title: "add category"
-        });
-    }
-    catch(err) {
-        console.log(err);
-    }
-}
-exports.post_category_create = async function(req, res) {
-    const name = req.body.name;
-    try {
-        await Category.create({ name: name , url: slugField(name) });
-        res.redirect("/admin/categories?action=create");
-    }
-    catch(err) {
-        console.log(err);
-    }
-}
-
-
 exports.get_blog_edit = async function(req, res) {
     const blogid = req.params.blogid;
 
@@ -224,6 +169,81 @@ exports.post_blog_edit = async function(req, res) {
         console.log(err);
     }
 }
+exports.get_blogs = async function(req, res) {
+    try {
+        const blogs = await Blog.findAll({ 
+            attributes: ["id","baslik","altbaslik","resim"],
+            include: {
+                model: Category,
+                attributes: ["name"]
+            } 
+        });
+        res.render("admin/blog-list", {
+            title: "blog list",
+            blogs: blogs,
+            action: req.query.action,
+            blogid: req.query.blogid
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+exports.get_category_delete = async function(req, res){
+    const categoryid = req.params.categoryid;
+
+    try {
+        const category = await Category.findByPk(categoryid);
+
+        res.render("admin/category-delete", {
+            title: "delete category",
+            category: category
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+exports.post_category_delete = async function(req, res) {
+    const categoryid = req.body.categoryid;
+    try {
+        await Category.destroy({
+            where: {
+                id: categoryid
+            }
+        });
+        res.redirect("/admin/categories?action=delete");
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+
+exports.get_category_create = async function(req, res) {
+    try {
+        res.render("admin/category-create", {
+            title: "add category"
+        });
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+exports.post_category_create = async function(req, res) {
+    const name = req.body.name;
+    try {
+        await Category.create({ name: name , url: slugField(name) });
+        res.redirect("/admin/categories?action=create");
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
+
+
+
 
 exports.get_category_remove = async function(req, res) {
     const blogid = req.body.blogid;
@@ -274,26 +294,6 @@ exports.post_category_edit = async function(req, res) {
     }
 }
 
-exports.get_blogs = async function(req, res) {
-    try {
-        const blogs = await Blog.findAll({ 
-            attributes: ["id","baslik","altbaslik","resim"],
-            include: {
-                model: Category,
-                attributes: ["name"]
-            } 
-        });
-        res.render("admin/blog-list", {
-            title: "blog list",
-            blogs: blogs,
-            action: req.query.action,
-            blogid: req.query.blogid
-        });
-    }
-    catch(err) {
-        console.log(err);
-    }
-}
 
 exports.get_categories = async function(req, res) {
     try {
