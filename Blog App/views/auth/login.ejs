@@ -19,8 +19,8 @@
                 <% } %>
                
 
-                <form method="post" action="/auth/login?_csrf=<%= crfToken %>">
-                    <!-- <input type="hidden" name="_csrf" value="<%= crfToken %>"> -->
+                <form method="post">
+                    <input type="hidden" name="_csrf" value="<%= crfToken %>">
                     <div class="row mb-3">
                         <label for="email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-12">
