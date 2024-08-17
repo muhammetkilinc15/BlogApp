@@ -28,7 +28,7 @@ exports.blogs_details = async function(req, res) {
 }
 
 exports.blog_list = async function(req, res) {
-    const size = 3;
+    const size = 2;
     const { page = 0 } = req.query;
     const slug = req.params.slug;
 
