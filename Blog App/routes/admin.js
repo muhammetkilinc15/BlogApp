@@ -33,7 +33,16 @@ router.post("/categories/:categoryid",isAuth, adminController.post_category_edit
 
 router.get("/categories",isAuth, adminController.get_categories);
 
+// ************************************** UserRoles Routes Settings **************************************
+
+router.get("/roles/:roleid", isAuth, csrf, adminController.get_role_edit);
+router.post("/roles", isAuth, adminController.post_role_edit);
+
+router.post("/roles/remove",isAuth,csrf, adminController.roles_remove);
+router.get("/roles/",isAuth,csrf, adminController.get_roles);
 
 
-
+router.get("/users",isAuth,adminController.get_user)
+router.get("/users/:userid",isAuth,csrf,adminController.get_user_edit)
+router.post("/users/:userid",isAuth,csrf,adminController.post_user_edit)
 module.exports = router;
