@@ -25,6 +25,13 @@
                         Blog Silindi.
                     </div>
                 <% } %>
+              
+                <% if (action != "undefined" && action=="not-access") { %>
+                    <div class="alert alert-danger">
+                        Her bloga erişiminiz yok
+                    </div>
+                <% } %>
+                
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -36,9 +43,10 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <% let index = 1 %>
                         <% blogs.forEach(blog => { %>
                             <tr>
-                                <td>#<%= blog.dataValues.id %> </td>
+                                <td> <b>#<%= index++ %></b> </td>
                                 <td>
                                     <img src="/static/images/<%= blog.dataValues.resim %>" class="img-fluid" alt="">
                                 </td>
