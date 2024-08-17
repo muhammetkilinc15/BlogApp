@@ -2,20 +2,20 @@ const Blog = require("../models/blog");
 const Category = require("../models/category");
 const Role = require("../models/role");
 const User = require("../models/user");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const sequelize = require("../data/db");
 const slugField = require("../helpers/slugfield");
 
 const fs = require("fs");
-const { group } = require("console");
-const { raw } = require("express");
-const { title } = require("process");
+const { isatty } = require("tty");
 
 exports.get_blog_delete = async function (req, res) {
   const blogid = req.params.blogid;
-
+  const userId = req.session.userId;
+  const isAdmin = req.session.roles.includes("admin")
   try {
-    const blog = await Blog.findByPk(blogid);
+    const blog = await Blog.findOne({where:
+      isAdmin ? {id :blogid } : {id :blogid , UserId : userId}});
 
     if (blog) {
       return res.render("admin/blog-delete", {
@@ -61,7 +61,7 @@ exports.post_blog_create = async function (req, res) {
   const resim = req.file.filename;
   const anasayfa = req.body.anasayfa == "on" ? 1 : 0;
   const onay = req.body.onay == "on" ? 1 : 0;
-
+  const userId = req.session.userId;
   try {
     await Blog.create({
       baslik: baslik,
@@ -71,6 +71,7 @@ exports.post_blog_create = async function (req, res) {
       resim: resim,
       anasayfa: anasayfa,
       onay: onay,
+      UserId : userId
     });
     res.redirect("/admin/blogs?action=create");
   } catch (err) {
@@ -79,11 +80,13 @@ exports.post_blog_create = async function (req, res) {
 };
 exports.get_blog_edit = async function (req, res) {
   const blogid = req.params.blogid;
-
+  const userId = req.session.userId;
+  const isAdmin = req.session.roles.includes("admin")
   try {
     const blog = await Blog.findOne({
-      where: {
+      where: isAdmin ? { id: blogid} : {
         id: blogid,
+        UserId : userId
       },
       include: {
         model: Category,
@@ -100,7 +103,7 @@ exports.get_blog_edit = async function (req, res) {
       });
     }
 
-    res.redirect("admin/blogs");
+    return res.redirect("/admin/blogs?action=not-access");
   } catch (err) {
     console.log(err);
   }
@@ -112,7 +115,7 @@ exports.post_blog_edit = async function (req, res) {
   const aciklama = req.body.aciklama;
   const kategoriIds = req.body.categories;
   const url = req.body.url;
-
+  const userId = req.session.userId;
   let resim = req.body.resim;
 
   if (req.file) {
@@ -130,6 +133,7 @@ exports.post_blog_edit = async function (req, res) {
     const blog = await Blog.findOne({
       where: {
         id: blogid,
+        UserId : userId
       },
       include: {
         model: Category,
@@ -168,6 +172,10 @@ exports.post_blog_edit = async function (req, res) {
   }
 };
 exports.get_blogs = async function (req, res) {
+  const userId = req.session.userId;
+  console.log(req.session.roles)
+  const isModerator = req.session.roles.includes("modaratör")
+  const isAdmin= req.session.roles.includes("moderator")
   try {
     const blogs = await Blog.findAll({
       attributes: ["id", "baslik", "altbaslik", "resim"],
@@ -175,6 +183,7 @@ exports.get_blogs = async function (req, res) {
         model: Category,
         attributes: ["name"],
       },
+      where: isModerator && !isAdmin ? {userId:  userId }: null
     });
     res.render("admin/blog-list", {
       title: "blog list",

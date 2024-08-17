@@ -4,7 +4,7 @@ const emailService = require("../helpers/send-mail");
 const config = require("../config");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
-const { text } = require("express");
+const { text, raw } = require("express");
 
 // **************************** Register işlemleri için get -post  ****************************
 exports.get_register = async function (req, res) {
@@ -96,8 +96,14 @@ exports.post_login = async function (req, res) {
       // cookie
       // res.cookie("isAuth",1)
       // session
+      const userRoles = await user.getRoles({
+        attributes : ["roleName"],
+        raw:true // sadece bilginin gelmesi
+      })
+      req.session.roles = userRoles.map((role)=> role["roleName"]); // ["admin","moderator"]
       req.session.isAuth = true;
       req.session.fullName = user.fullName;
+      req.session.userId = user.id
       const url = req.query.returnUrl || "/";
       return res.redirect(url);
     }
