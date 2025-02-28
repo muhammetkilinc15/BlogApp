@@ -8,9 +8,9 @@ const config = {
         database: "blogdb"
     },
     email: {
-        username: "nodejsdeneme0715@outlook.com", // Doğru e-posta adresiniz
-        password: "19072002Fb", // Eğer 2FA etkinse, bu alana uygulama şifresi girilmeli
-        from: "nodejsdeneme0715@outlook.com" // Gönderici e-posta adresi
+        username: "********************", // Doğru e-posta adresiniz
+        password:"********************",, // Eğer 2FA etkinse, bu alana uygulama şifresi girilmeli
+        from: "********************", // Gönderici e-posta adresi
     }
 };
 
